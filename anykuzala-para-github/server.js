@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
@@ -326,6 +327,18 @@ const server = http.createServer(async (req, res) => {
     return sendJSON(res, 200, { ok: true, settings: db.settings });
   }
 
+  // 9. Verificar ao vivo o status do TikTok Live
+  if (pathname === '/api/tiktok-live-check' && req.method === 'GET') {
+    const db = readDB();
+    const handle = db.settings.tiktokHandle || 'aniezasousa';
+    const result = await checkTikTokLiveStatus(handle);
+    if (db.settings.autoDetectLive !== false && db.settings.isLiveOnTiktok !== result.isLive) {
+      db.settings.isLiveOnTiktok = result.isLive;
+      writeDB(db);
+    }
+    return sendJSON(res, 200, { ok: true, isLive: result.isLive, handle, status: result.status });
+  }
+
   // ==================== STATIC FILES ====================
   // Ficheiros enviados em produção (volume persistente) têm prioridade em /uploads/*
   if (DATA_DIR && pathname.startsWith('/uploads/')) {
@@ -355,6 +368,56 @@ const server = http.createServer(async (req, res) => {
     res.end(content);
   });
 });
+
+function checkTikTokLiveStatus(username) {
+  return new Promise((resolve) => {
+    const cleanUser = (username || '').replace(/^@/, '').trim();
+    if (!cleanUser) return resolve({ isLive: false, status: 0 });
+
+    const options = {
+      hostname: 'www.tiktok.com',
+      path: `/@${cleanUser}/live`,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'pt-PT,pt;q=0.9,en;q=0.8'
+      }
+    };
+
+    const req = https.get(options, (res) => {
+      let html = '';
+      res.on('data', chunk => html += chunk);
+      res.on('end', () => {
+        // TikTok define liveRoomStatus: 2 quando a transmissão ao vivo está ON
+        const match = html.match(/"liveRoomStatus":\s*([0-9]+)/);
+        const st = match ? parseInt(match[1], 10) : 0;
+        resolve({ isLive: st === 2, status: st });
+      });
+    });
+
+    req.on('error', () => resolve({ isLive: false, status: 0 }));
+    req.setTimeout(7000, () => {
+      req.destroy();
+      resolve({ isLive: false, status: 0 });
+    });
+  });
+}
+
+// Robô verificador em segundo plano (corre a cada 60 segundos)
+setInterval(async () => {
+  try {
+    const db = readDB();
+    if (db.settings.autoDetectLive !== false) {
+      const handle = db.settings.tiktokHandle || 'aniezasousa';
+      const liveCheck = await checkTikTokLiveStatus(handle);
+      if (db.settings.isLiveOnTiktok !== liveCheck.isLive) {
+        db.settings.isLiveOnTiktok = liveCheck.isLive;
+        writeDB(db);
+        console.log(`📡 [TikTok Live Auto] @${handle} alterou para: ${liveCheck.isLive ? '🔴 EM DIRETO' : '⚪ OFFLINE'}`);
+      }
+    }
+  } catch (e) {}
+}, 60000);
 
 server.listen(PORT, () => {
   console.log('====================================================');

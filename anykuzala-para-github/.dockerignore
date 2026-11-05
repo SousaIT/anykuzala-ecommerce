@@ -1,0 +1,5 @@
+node_modules
+.git
+iniciar-loja.bat
+public/uploads/pedido_*.png
+public/uploads/AK-*
