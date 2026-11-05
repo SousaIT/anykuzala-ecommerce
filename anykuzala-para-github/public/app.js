@@ -431,10 +431,6 @@ function openGalleryModal(productId) {
   document.getElementById('productGalleryModal').classList.add('open');
 }
 
-  renderGalleryAngle();
-  document.getElementById('productGalleryModal').classList.add('open');
-}
-
 function closeGalleryModal() {
   document.getElementById('productGalleryModal').classList.remove('open');
 }
