@@ -1,0 +1,107 @@
+{
+  "settings": {
+    "storeName": "AnyKuzala Femme",
+    "tagline": "Moda que valoriza vocÃª â€¢ ElegÃ¢ncia que combina contigo.",
+    "whatsappNumber": "244949723140",
+    "tiktokUrl": "https://www.tiktok.com/@anykuzala",
+    "isLiveOnTiktok": true,
+    "liveTitle": "Estamos em direto no TikTok! Escolhe a tua peÃ§a antes que esgote!",
+    "bankName": "BFA & BAI",
+    "accountHolder": "AnyKuzala Femme",
+    "ibanBfa": "0006 0000 2492 2950 3017 3",
+    "ibanBai": "0040 0000 6292 6876 1029 2",
+    "iban": "BFA: 000600002492295030173 | BAI: 0040 0000 6292 6876 1029 2",
+    "mcxExpress": "949 723 140",
+    "deliveryFeeLuanda": 2000,
+    "deliveryFeeProvinces": 5000,
+    "adminPassword": "admin"
+  },
+  "products": [
+    {
+      "id": "peca-real-1",
+      "code": "#01",
+      "name": "Blusa de Cetim Rosa Perolado Manga Longa",
+      "category": "Cetim",
+      "size": "M",
+      "price": 5000,
+      "stock": 1,
+      "isUnique": true,
+      "image": "/uploads/peca1_clean.jpg",
+      "images": [
+        "/uploads/peca1_clean.jpg",
+        "/uploads/modelo_real_peca1.jpg",
+        "/uploads/peca1_angle2.jpg",
+        "/uploads/peca1_back.jpg"
+      ]
+    },
+    {
+      "id": "peca-real-2",
+      "code": "#02",
+      "name": "Camisa de Cetim Estampada Luxo (Laranja & Azul Royal)",
+      "category": "Cetim",
+      "size": "M",
+      "price": 5000,
+      "stock": 1,
+      "isUnique": true,
+      "image": "/uploads/peca2_clean.jpg",
+      "images": [
+        "/uploads/peca2_clean.jpg",
+        "/uploads/modelo_real_peca2.jpg",
+        "/uploads/peca2_angle2.jpg",
+        "/uploads/peca2_back.jpg"
+      ]
+    },
+    {
+      "id": "peca-real-3",
+      "code": "#03",
+      "name": "Camisa Floral Mostarda Gola ClÃ¡ssica Preta (Manga 3/4)",
+      "category": "Blusas",
+      "size": "M40",
+      "price": 5000,
+      "stock": 1,
+      "isUnique": true,
+      "image": "/uploads/peca3_clean.jpg",
+      "images": [
+        "/uploads/peca3_clean.jpg",
+        "/uploads/modelo_real_peca3_lado.jpg",
+        "/uploads/modelo_real_peca3_cruzados.jpg",
+        "/uploads/peca3_angle2.jpg",
+        "/uploads/peca3_back.jpg"
+      ]
+    },
+    {
+      "id": "peca-real-4",
+      "code": "#04",
+      "name": "Blusa Preta & Estampa Floral Vermelha (Manga 3/4)",
+      "category": "Blusas",
+      "size": "M40",
+      "price": 5000,
+      "stock": 1,
+      "isUnique": true,
+      "image": "/uploads/peca4_clean.jpg",
+      "images": [
+        "/uploads/peca4_clean.jpg",
+        "/uploads/modelo_peca4.jpg",
+        "/uploads/peca4_angle2.jpg",
+        "/uploads/peca4_back.jpg"
+      ]
+    },
+    {
+      "id": "peca-real-5",
+      "code": "#05",
+      "name": "Camisa Branca Elegante com LaÃ§o & Mangas Plissadas",
+      "category": "Camisas Brancas",
+      "size": "2XL",
+      "price": 7000,
+      "stock": 1,
+      "isUnique": true,
+      "image": "/uploads/peca5_clean.jpg",
+      "images": [
+        "/uploads/peca5_clean.jpg",
+        "/uploads/modelo_peca5.jpg",
+        "/uploads/peca5_angle2.jpg"
+      ]
+    }
+  ],
+  "orders": []
+}

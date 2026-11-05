@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANYKUZALA FEMME • Elegância que combina contigo</title>
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Notificações (Toasts) -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Barra de Live no TikTok -->
+  <div id="liveBanner" class="live-banner" style="display: none;">
+    <span class="live-badge"><span class="live-dot"></span> EM LIVE NO TIKTOK</span>
+    <span id="liveTitleText">Estamos em direto! Escolhe a tua peça antes que esgote!</span>
+    <a id="liveTiktokLink" href="https://www.tiktok.com" target="_blank">Assistir Live →</a>
+  </div>
+
+  <!-- 1. TOPO PRINCIPAL (Estilo Woo Fashion) -->
+  <header class="main-header">
+    <div class="header-container">
+      <!-- Logo Esquerda -->
+      <a href="index.html" class="brand">
+        <img src="logo.jpg" alt="AnyKuzala Femme" class="brand-logo-img" />
+        <div>
+          <span id="storeNameHeading" class="brand-title">ANYKUZALA</span>
+          <span id="storeTagline" class="brand-subtitle">FEMME • BOUTIQUE</span>
+        </div>
+      </a>
+
+      <!-- Pesquisa Centro com Botão Preto -->
+      <div class="header-search">
+        <input type="text" id="searchInput" placeholder="Pesquisa por peça ou código da Live (ex: #01, Cetim)..." oninput="renderProducts()" />
+        <button type="button" onclick="renderProducts()" title="Pesquisar">🔍</button>
+      </div>
+
+      <!-- Ações Direita (Atendimento, Favoritos, Valor + Sacola Preta) -->
+      <div class="header-actions">
+        <a id="headerWhatsappLink" href="https://wa.me/244949723140" target="_blank" class="action-link">
+          <span>🎧</span> ATENDIMENTO
+        </a>
+
+        <div class="action-divider"></div>
+
+        <button type="button" class="action-link" onclick="filterFavorites()" id="favNavBtn" title="Peças Favoritas">
+          <span>★</span> FAVORITAS (<span id="favCountBadge">0</span>)
+        </button>
+
+        <div class="action-divider"></div>
+
+        <button type="button" class="cart-trigger" onclick="openCheckoutModal()">
+          <span id="headerCartTotal" class="cart-price-label">0 Kz</span>
+          <div class="bag-icon-wrap">
+            🛍️
+            <span id="navCartCount" class="bag-count">0</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. BARRA DE MENU DE CATEGORIAS -->
+  <nav class="nav-bar">
+    <div class="nav-bar-container">
+      <div class="all-categories-trigger" onclick="document.getElementById('catalogoAnchor').scrollIntoView({behavior:'smooth'})">
+        <span>☰</span> CATEGORIAS <span style="margin-left: 16px; font-size: 0.7rem;">⌄</span>
+      </div>
+
+      <div class="nav-links">
+        <button class="nav-link-btn cat-btn active" data-cat="Todos">LANÇAMENTOS</button>
+        <button class="nav-link-btn cat-btn" data-cat="Cetim">ROUPAS DE CETIM</button>
+        <button class="nav-link-btn cat-btn" data-cat="Camisas Brancas">CAMISAS BRANCAS</button>
+        <button class="nav-link-btn cat-btn" data-cat="Calças Jeans">CALÇAS JEANS</button>
+        <button class="nav-link-btn cat-btn" data-cat="Blusas">BLUSAS</button>
+        <button class="nav-link-btn cat-btn" data-cat="Saias">SAIAS</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3. SLIDER EDITORIAL CINEMATOGRÁFICO COM ALTERNÂNCIA AUTOMÁTICA (Estilo Studio Colab) -->
+  <section class="editorial-slider-container" id="editorialSlider">
+    <!-- SLIDE 1: Nova Coleção Fardos Finos -->
+    <div class="editorial-slide active" data-slide="0">
+      <div class="slide-dual-models-wrap">
+        <img src="/uploads/modelo_real_peca3_cruzados.jpg" class="slide-side-model" alt="Modelo AnyKuzala Braços Cruzados" />
+        <img src="/uploads/modelo_real_peca2.jpg" class="slide-side-model" alt="Modelo AnyKuzala Color Block" />
+      </div>
+      <div class="slide-overlay-gradient"></div>
+      <div class="slide-content-center">
+        <span class="slide-subheading">ANYKUZALA FEMME • BOUTIQUE</span>
+        <h2 class="slide-main-title">NOVA COLEÇÃO FARDOS FINOS</h2>
+        <p class="slide-tagline">PEÇAS EXCLUSIVAS SELECIONADAS A PARTIR DE 5.000 KZ</p>
+        <a href="#catalogoAnchor" class="slide-action-btn">COMPRAR AGORA</a>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Roupas de Cetim de Luxo -->
+    <div class="editorial-slide" data-slide="1">
+      <div class="slide-dual-models-wrap">
+        <img src="/uploads/modelo_real_peca1.jpg" class="slide-side-model" alt="Modelo AnyKuzala Cetim Rosa" />
+        <img src="/uploads/peca2_clean.jpg" class="slide-side-model" alt="Camisa Color Block" />
+      </div>
+      <div class="slide-overlay-gradient"></div>
+      <div class="slide-content-center">
+        <span class="slide-subheading">EXCLUSIVIDADE • LIVES NO TIKTOK</span>
+        <h2 class="slide-main-title">ROUPAS DE CETIM &amp; SEDA</h2>
+        <p class="slide-tagline">BRILHO, FLUIDEZ E ELEGÂNCIA PARA QUALQUER OCASIÃO</p>
+        <a href="#catalogoAnchor" class="slide-action-btn">VER PEÇAS DE CETIM</a>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Elegante & Atemporal -->
+    <div class="editorial-slide" data-slide="2">
+      <div class="slide-dual-models-wrap">
+        <img src="/uploads/modelo_real_peca3_lado.jpg" class="slide-side-model" alt="Modelo AnyKuzala De Lado" />
+        <img src="/uploads/peca4_clean.jpg" class="slide-side-model" alt="Blusa Floral Vermelha" />
+      </div>
+      <div class="slide-overlay-gradient"></div>
+      <div class="slide-content-center">
+        <span class="slide-subheading">QUALIDADE CREME &amp; 1ª LINHA</span>
+        <h2 class="slide-main-title">ELEGANTE &amp; ATEMPORAL</h2>
+        <p class="slide-tagline">MODA QUE VALORIZA VOCÊ • DIRETO DO ARMAZÉM</p>
+        <a href="#catalogoAnchor" class="slide-action-btn">ESCOLHER PEÇAS</a>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Camisas Brancas Sofisticadas -->
+    <div class="editorial-slide" data-slide="3">
+      <div class="slide-dual-models-wrap">
+        <img src="/uploads/peca5_clean.jpg" class="slide-side-model" alt="Camisa Branca Plissada" />
+        <img src="/uploads/modelo_real_peca1.jpg" class="slide-side-model" alt="Blusa Rosa AnyKuzala" />
+      </div>
+      <div class="slide-overlay-gradient"></div>
+      <div class="slide-content-center">
+        <span class="slide-subheading">CLÁSSICOS ESSENCIAIS</span>
+        <h2 class="slide-main-title">CAMISAS BRANCAS FINAS</h2>
+        <p class="slide-tagline">DETALHES EM LAÇO E MANGAS PLISSADAS DO M AO 2XL</p>
+        <a href="#catalogoAnchor" class="slide-action-btn">VER CAMISAS</a>
+      </div>
+    </div>
+
+    <!-- Setas Discretas de Navegação -->
+    <button type="button" class="slider-arrow-btn prev" onclick="moveSlide(-1)" title="Anterior">‹</button>
+    <button type="button" class="slider-arrow-btn next" onclick="moveSlide(1)" title="Próximo">›</button>
+
+    <!-- Bolinhas Indicadoras no Canto Inferior Direito (Estilo Studio Colab) -->
+    <div class="slider-dots-box" id="sliderDotsBox">
+      <button class="slider-dot-btn active" onclick="setSlide(0)"></button>
+      <button class="slider-dot-btn" onclick="setSlide(1)"></button>
+      <button class="slider-dot-btn" onclick="setSlide(2)"></button>
+      <button class="slider-dot-btn" onclick="setSlide(3)"></button>
+    </div>
+
+    <!-- Botão Redondo com Seta para Baixo no Centro Inferior -->
+    <a href="#catalogoAnchor" class="scroll-down-circle" title="Rolar para os produtos">
+      <span>⌄</span>
+    </a>
+  </section>
+
+  <!-- 4. OS 4 CARTÕES BRANCOS SOBREPOSTOS AO BANNER -->
+  <section class="features-overlap-wrap">
+    <div class="features-grid-4">
+      <div class="feature-white-card">
+        <div class="feature-icon-circle">🚚</div>
+        <h4>Entrega Rápida</h4>
+        <p>Para Luanda e Províncias</p>
+      </div>
+
+      <div class="feature-white-card">
+        <div class="feature-icon-circle">🏷️</div>
+        <h4>Preços de Live</h4>
+        <p>Peças únicas selecionadas</p>
+      </div>
+
+      <div class="feature-white-card">
+        <div class="feature-icon-circle">💳</div>
+        <h4>Express & IBAN</h4>
+        <p>Pagamento rápido e simples</p>
+      </div>
+
+      <div class="feature-white-card">
+        <div class="feature-icon-circle">🔒</div>
+        <h4>Loja 100% Segura</h4>
+        <p>Confirmação imediata no WhatsApp</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. DESTAQUES DA SEMANA + FILTRO DE TAMANHO -->
+  <div id="catalogoAnchor" class="section-header-bar">
+    <h2 class="section-title">DESTAQUES DA SEMANA</h2>
+
+    <div class="size-filter-bar">
+      <strong>TAMANHO:</strong>
+      <button class="size-chip active" data-size="Todos" onclick="setSizeFilter('Todos', this)">TODOS</button>
+      <button class="size-chip" data-size="M" onclick="setSizeFilter('M', this)">M</button>
+      <button class="size-chip" data-size="M40" onclick="setSizeFilter('M40', this)">M40</button>
+      <button class="size-chip" data-size="2XL" onclick="setSizeFilter('2XL', this)">2XL</button>
+      <button class="size-chip" data-size="S" onclick="setSizeFilter('S', this)">S</button>
+      <button class="size-chip" data-size="L" onclick="setSizeFilter('L', this)">L</button>
+    </div>
+  </div>
+
+  <!-- Grelha de Produtos -->
+  <main class="catalog-container">
+    <div id="productsGrid" class="products-grid"></div>
+  </main>
+
+  <!-- Barra Flutuante de Seleção (Liberdade de escolher várias peças e depois enviar para o WhatsApp) -->
+  <div id="floatingCart" class="floating-cart">
+    <div onclick="openCheckoutModal()" style="cursor:pointer;">
+      <strong id="floatCartItems">0 peças selecionadas</strong>
+      <div style="font-size: 0.88rem; color: #fde68a; font-weight:700;" id="floatCartTotal">Total: 0 Kz</div>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button type="button" class="btn" style="background:#333; color:#fff; padding: 10px 14px; font-size:0.74rem;" onclick="openCheckoutModal()">
+        VER LISTA
+      </button>
+      <button type="button" class="btn btn-whatsapp" style="padding: 10px 16px; font-size:0.78rem;" onclick="sendCartDirectlyToWhatsApp()">
+        📲 PEDIR NO WHATSAPP →
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 1: Galeria de Ângulos da Peça -->
+  <div id="productGalleryModal" class="modal-backdrop" onclick="if(event.target===this) closeGalleryModal()">
+    <div class="modal-card" style="max-width: 560px;">
+      <div class="modal-header">
+        <div>
+          <span id="galCodeBadge" style="background:#111; color:#fff; padding:3px 10px; font-size:0.72rem; font-weight:700;">#01</span>
+          <h3 id="galTitle" style="margin-top:4px; font-size:1.05rem;">Nome da Peça</h3>
+        </div>
+        <button class="close-btn" onclick="closeGalleryModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="gallery-main-wrap">
+          <button type="button" class="gallery-nav-btn prev" id="galPrevBtn" onclick="changeAngle(-1)">‹</button>
+          <img id="galMainImg" src="" alt="Ângulo da peça" />
+          <button type="button" class="gallery-nav-btn next" id="galNextBtn" onclick="changeAngle(1)">›</button>
+        </div>
+
+        <div id="galThumbs" class="gallery-thumbs"></div>
+
+        <div id="galUniqueAlert"></div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:18px; padding-top:14px; border-top:1px solid var(--border);">
+          <div>
+            <span id="galSize" style="background:#f4f4f4; color:#111; padding:4px 10px; font-size:0.78rem; font-weight:700; display:inline-block; margin-bottom:4px;">
+              Tamanho: M
+            </span>
+            <div id="galPrice" style="font-size:1.4rem; font-weight:800; color:#111;">4.500 Kz</div>
+          </div>
+
+          <button id="galBuyBtn" class="btn btn-primary" style="padding: 12px 22px;">
+            + ADICIONAR À SACOLA
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Resumo da Sacola (Sem formulário comprido - direto para o WhatsApp) -->
+  <div id="checkoutModal" class="modal-backdrop" onclick="if(event.target===this) closeCheckoutModal()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🛍️ MINHAS PEÇAS ESCOLHIDAS</h3>
+        <button class="close-btn" onclick="closeCheckoutModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="cartItemsContainer"></div>
+
+        <div class="summary-totals">
+          <div class="summary-line total">
+            <span>TOTAL DAS PEÇAS:</span>
+            <span id="summaryTotal">0 Kz</span>
+          </div>
+        </div>
+
+        <div class="bank-box">
+          <h4 style="margin-bottom:10px; font-size:0.85rem;">💳 DADOS PARA PAGAMENTO IMEDIATO</h4>
+          <div class="bank-row">
+            <div>
+              <span style="font-size: 0.72rem; color: #777; display:block;">Multicaixa Express</span>
+              <strong id="mcxText">949 723 140</strong>
+            </div>
+            <button type="button" class="copy-btn" onclick="copyText('mcxText')">COPIAR EXPRESS</button>
+          </div>
+          <div class="bank-row">
+            <div>
+              <span style="font-size: 0.72rem; color: #777; display:block;">IBAN BFA</span>
+              <strong id="ibanBfaText">0006 0000 2492 2950 3017 3</strong>
+            </div>
+            <button type="button" class="copy-btn" onclick="copyText('ibanBfaText')">COPIAR BFA</button>
+          </div>
+          <div class="bank-row">
+            <div>
+              <span style="font-size: 0.72rem; color: #777; display:block;">IBAN BAI</span>
+              <strong id="ibanBaiText">0040 0000 6292 6876 1029 2</strong>
+            </div>
+            <button type="button" class="copy-btn" onclick="copyText('ibanBaiText')">COPIAR BAI</button>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button type="button" class="btn btn-whatsapp" style="flex:1; padding: 14px; font-size: 0.9rem;" onclick="sendCartDirectlyToWhatsApp()">
+            📲 PEDIR ESTAS PEÇAS NO WHATSAPP
+          </button>
+          <button type="button" class="btn btn-outline" onclick="clearCart()">
+            Limpar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "anykuzala-ecommerce",
+  "version": "1.0.0",
+  "description": "E-Commerce de Fardos de Roupa Feminina AnyKuzala (Kwanza Kz, IBAN, Multicaixa Express & WhatsApp)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
