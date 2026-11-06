@@ -24,6 +24,23 @@ if (DATA_DIR && !fs.existsSync(DB_PATH) && fs.existsSync(SEED_DB_PATH)) {
   console.log(`📦 Base de dados inicial copiada para ${DB_PATH}`);
 }
 
+// Sincroniza fotos soltas na raiz (__dirname) para a pasta de uploads
+try {
+  const rootFiles = fs.readdirSync(__dirname);
+  for (const f of rootFiles) {
+    if (/\.(jpg|jpeg|png|webp|svg)$/i.test(f)) {
+      const src = path.join(__dirname, f);
+      const dest = path.join(UPLOADS_DIR, f);
+      if (!fs.existsSync(dest)) {
+        fs.copyFileSync(src, dest);
+        console.log(`📸 Foto auto-migrada para uploads: ${f}`);
+      }
+    }
+  }
+} catch (e) {
+  console.error('Erro na auto-migração de fotos:', e);
+}
+
 function readDB() {
   try {
     let raw = fs.readFileSync(DB_PATH, 'utf8');
@@ -276,6 +293,27 @@ const server = http.createServer(async (req, res) => {
     return sendJSON(res, 200, { ok: true, products: db.products });
   }
 
+  // 5.1 Upload Direto de Imagem de Produto
+  if (pathname === '/api/admin/upload-image' && req.method === 'POST') {
+    const db = readDB();
+    if (!checkAdmin(req, db)) return sendJSON(res, 401, { error: 'Não autorizado' });
+    try {
+      const body = await parseBody(req);
+      if (!body.fileName || !body.base64) {
+        return sendJSON(res, 400, { error: 'fileName e base64 são obrigatórios' });
+      }
+      const safeName = path.basename(body.fileName).replace(/[^a-zA-Z0-9._-]/g, '');
+      const cleanBase64 = body.base64.replace(/^data:image\/[a-z]+;base64,/, '');
+      const targetPath = path.join(UPLOADS_DIR, safeName);
+      fs.writeFileSync(targetPath, Buffer.from(cleanBase64, 'base64'));
+      return sendJSON(res, 200, { ok: true, url: `/uploads/${safeName}` });
+    } catch (err) {
+      return sendJSON(res, 500, { error: err.message });
+    }
+  }
+
+
+
   // 6. Excluir Produto
   if (pathname.startsWith('/api/admin/products/') && req.method === 'DELETE') {
     const db = readDB();
@@ -286,6 +324,8 @@ const server = http.createServer(async (req, res) => {
     writeDB(db);
     return sendJSON(res, 200, { ok: true, products: db.products });
   }
+
+
 
   // 7. Atualizar Status do Pedido (e abater stock quando pago)
   if (pathname.startsWith('/api/admin/orders/') && req.method === 'PUT') {
@@ -340,13 +380,25 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ==================== STATIC FILES ====================
-  // Ficheiros enviados em produção (volume persistente) têm prioridade em /uploads/*
-  if (DATA_DIR && pathname.startsWith('/uploads/')) {
-    const volFile = path.join(UPLOADS_DIR, path.basename(decodeURIComponent(pathname)));
-    if (volFile.startsWith(UPLOADS_DIR) && fs.existsSync(volFile)) {
-      const volExt = path.extname(volFile).toLowerCase();
-      res.writeHead(200, { 'Content-Type': MIME_TYPES[volExt] || 'application/octet-stream' });
-      return fs.createReadStream(volFile).pipe(res);
+  // Servir arquivos de uploads com busca inteligente multi-diretório
+  if (pathname.startsWith('/uploads/')) {
+    const fileName = path.basename(decodeURIComponent(pathname));
+    const candidates = [
+      DATA_DIR ? path.join(UPLOADS_DIR, fileName) : null,
+      path.join(BUNDLED_UPLOADS_DIR, fileName),
+      path.join(__dirname, fileName),
+      path.join(PUBLIC_DIR, fileName)
+    ].filter(Boolean);
+
+    for (const c of candidates) {
+      if (fs.existsSync(c)) {
+        const cExt = path.extname(c).toLowerCase();
+        res.writeHead(200, {
+          'Content-Type': MIME_TYPES[cExt] || 'application/octet-stream',
+          'Cache-Control': 'public, max-age=86400'
+        });
+        return fs.createReadStream(c).pipe(res);
+      }
     }
   }
 
